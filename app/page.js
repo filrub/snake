@@ -42,49 +42,43 @@ export default function Home() {
 
     console.log("snake", snake, "direction", direction);
 
-    let newPos = { col: 0, row: 0 };
+    let newPos;
     switch (direction) {
       case "right":
+        newPos = { row: snake[0].row, col: snake[0].col + 1 };
         if (snake[0].col + 1 >= ColsCount + 1) {
           setMessage("HAI PERSO!!!");
           setPlay(() => false);
-        } else {
-          newPos = { row: snake[0].row, col: snake[0].col + 1 };
         }
         break;
       case "left":
+        newPos = { row: snake[0].row, col: snake[0].col - 1 };
         if (snake[0].col - 1 < -1) {
           setMessage("HAI PERSO!!!");
           setPlay(() => false);
-        } else {
-          newPos = { row: snake[0].row, col: snake[0].col - 1 };
         }
         break;
       case "up":
+        newPos = { row: snake[0].row - 1, col: snake[0].col };
         if (snake[0].row - 1 < -1) {
           setMessage("HAI PERSO!!!");
           setPlay(() => false);
-        } else {
-          newPos = { row: snake[0].row - 1, col: snake[0].col };
         }
         break;
       case "down":
+        newPos = { row: snake[0].row + 1, col: snake[0].col };
         if (snake[0].row + 1 >= RowsCount + 1) {
           setMessage("HAI PERSO!!!");
           setPlay(() => false);
-        } else {
-          newPos = { row: snake[0].row + 1, col: snake[0].col };
         }
         break;
     }
-    if (play) {
-      console.log(play);
-      snake.unshift({
-        row: newPos.row,
-        col: newPos.col,
-      });
-      snake.pop();
-    }
+    console.log(play);
+    snake.unshift({
+      row: newPos.row,
+      col: newPos.col,
+    });
+    snake.pop();
 
     if (
       scacchiera[snake[0].row * RowsCount + snake[0].col]?.isPrize &&
@@ -101,13 +95,17 @@ export default function Home() {
         col: snake[snake.length - 1].col,
         direction: snake[snake.length - 1].direction,
       });
-      setSnake(() => snake);
+
       setPrize((prev) => prev + 10);
       setSpeed((prev) => prev - 20);
       setMessage(
-        `Il punteggio è: ${prize}. Snake length: ${snake.length} Speed: ${speed}`
+        `Il punteggio è: ${prize + 10}. Snake length: ${
+          snake.length
+        } Speed: ${speed}`
       );
     }
+
+    setSnake(() => snake);
 
     setTimeout(() => setMove(!move), speed);
   }, [move]);
@@ -140,55 +138,18 @@ export default function Home() {
   }, []);
 
   const moveRight = () => {
-    console.log("moving right");
-    //scacchiera[snake[0].row * RowsCount + snake[0].col].direction = "right";
-
-    /* snake.unshift({
-      row: snake[0].row,
-      col: snake[0].col + 1,
-      direction: "right",
-    });
-    snake.pop();
-    setSnake(() => snake); */
     setDirection(() => "right");
   };
 
   const moveLeft = () => {
-    console.log("moving left");
-    //scacchiera[snake[0].row * RowsCount + snake[0].col].direction = "left";
-    /*  snake.unshift({
-      row: snake[0].row,
-      col: snake[0].col - 1,
-      direction: "left",
-    });
-    snake.pop();
-    setSnake(() => snake); */
     setDirection(() => "left");
   };
 
   const moveUp = () => {
-    console.log("moving up");
-    //scacchiera[snake[0].row * RowsCount + snake[0].col].direction = "up";
-    /* snake.unshift({
-      row: snake[0].row - 1,
-      col: snake[0].col,
-      direction: "up",
-    });
-    snake.pop();
-    setSnake(() => snake); */
     setDirection(() => "up");
   };
 
   const moveDown = () => {
-    console.log("moving down");
-    //scacchiera[snake[0].row * RowsCount + snake[0].col].direction = "down";
-    /*  snake.unshift({
-      row: snake[0].row + 1,
-      col: snake[0].col,
-      direction: "right",
-    });
-    snake.pop();
-    setSnake(() => snake); */
     setDirection(() => "down");
   };
 
@@ -233,9 +194,17 @@ export function Field({ scacchiera = [], snake = [], message, play }) {
       let symbol;
 
       if (scacchiera[row * RowsCount + col].isPrize) {
-        symbol = "🏆";
+        symbol = (
+          <Text p="0" m="0" ta="center" fw={800}>
+            🏆
+          </Text>
+        );
       } else {
-        symbol = "";
+        symbol = (
+          <Text p="0" m="0" ta="center">
+            X
+          </Text>
+        );
       }
 
       snake.forEach((el) => {
@@ -244,13 +213,17 @@ export function Field({ scacchiera = [], snake = [], message, play }) {
           scacchiera[row * RowsCount + col].row == el.row &&
           scacchiera[row * RowsCount + col].col == el.col
         ) {
-          symbol = "🐍";
+          symbol = (
+            <Text p="0" m="0" ta="center" fw={800}>
+              O
+            </Text>
+          );
         }
       });
 
       cols.push(
         <TableTd key={row * RowsCount + col}>
-          <Text p="0" m="0" ta="center">
+          <Text p="0" m="0" ta="center" fw={800}>
             {symbol}
           </Text>
         </TableTd>
@@ -267,9 +240,9 @@ export function Field({ scacchiera = [], snake = [], message, play }) {
     <Center mx="auto" v="100vh">
       <Stack>
         <Table
-          withTableBorder={true}
-          withRowBorders={true}
-          withColumnBorders={true}
+          //withTableBorder={true}
+          //withRowBorders={true}
+          //withColumnBorders={true}
           mx="auto"
           w={ColsCount * 60}
           h={RowsCount * 60}
