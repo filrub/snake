@@ -105,7 +105,7 @@ export default function Home() {
       );
     }
 
-    setSnake(() => snake);
+    setSnake(snake);
 
     setTimeout(() => setMove(!move), speed);
   }, [move]);
@@ -129,7 +129,7 @@ export default function Home() {
 
     data[getRandomIntInclusive(0, ColsCount * RowsCount - 1)].isPrize = true;
 
-    setScacchiera(() => data);
+    setScacchiera(data);
 
     setMessage(
       `Il punteggio è: ${prize}. Snake length: ${snake.length} Speed: ${speed}`
@@ -221,13 +221,7 @@ export function Field({ scacchiera = [], snake = [], message, play }) {
         }
       });
 
-      cols.push(
-        <TableTd key={row * RowsCount + col}>
-          <Text p="0" m="0" ta="center" fw={800}>
-            {symbol}
-          </Text>
-        </TableTd>
-      );
+      cols.push(<TableTd key={row * RowsCount + col}>{symbol}</TableTd>);
     }
     rows.push(
       <TableTr style={{ height: "35px" }} key={row * RowsCount + col}>
